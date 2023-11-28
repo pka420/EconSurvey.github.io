@@ -131,6 +131,7 @@ stats"></a></div></noscript>
     document.getElementById("state-label").innerHTML = setLabel(liberty, govtArray)
     document.getElementById("society-label").innerHTML = setLabel(progress, sctyArray)
 
+
     ideology = ""
     ideodist = Infinity
     for (var i = 0; i < ideologies.length; i++) {
@@ -227,6 +228,21 @@ stats"></a></div></noscript>
         ctx.fillText("Civil Axis: " + document.getElementById("state-label").innerHTML, 400, 415)
         ctx.fillText("Societal Axis: " + document.getElementById("society-label").innerHTML, 400, 535)
 
+        // post the results to api here.
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8080/api/results", true);
+
+        xhr.setRequestHeader("Content-Type", "application/json");
+        const body = JSON.stringify({
+            "economical": wealth,
+            "diplomatic": peace,
+            "civil": authority,
+            "societal": progress,
+        });
+
+        console.log(body);  
+
+        xhr.send(body)
         document.getElementById("banner").src = c.toDataURL();
     }
     </script>
