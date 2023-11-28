@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: ${backend_name:-survey_backend}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/app
+  frontend:
+    build: ./frontend
+    container_name: ${frontend_name:-survey_frontend}
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/default.conf:/etc/nginx/default.conf
+      - /etc/letsencrypt/:/etc/nginx/ssl
+    depends_on:
+      - backend
+
