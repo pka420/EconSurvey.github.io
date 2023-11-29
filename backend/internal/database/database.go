@@ -58,7 +58,11 @@ func (s* service) SaveResult(req models.ResultRequest) (error){
     ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
     defer cancel()
 
-    _, err := s.db.ExecContext(ctx, "INSERT into results (Economic, Diplomatic, Civil, Societal) VALUES($1, $2, $3, $4)", req.Economic, req.Diplomatic, req.Civil, req.Societal)
+    _, err := s.db.ExecContext(ctx, `INSERT into results (Economic, Diplomatic, Civil, Societal,
+                        EconomicLabel, DiplomaticLabel, CivilLabel, SocietalLabel, ClosestMatch) 
+                        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`, 
+                        req.Economic, req.Diplomatic, req.Civil, req.Societal,
+                        req.EconomicLabel, req.DiplomaticLabel, req.CivilLabel, req.SocietalLabel, req.ClosestMatch)
     if err != nil {
         log.Println("in db")
         log.Println("error saving result to db. Err: %v", err)
@@ -81,7 +85,8 @@ func(s* service) GetResults() (*models.ResultResponse, error) {
 
     for rows.Next() {
         var result models.ResultRequest
-        err := rows.Scan(&result.Economic, &result.Diplomatic, &result.Civil, &result.Societal)
+        err := rows.Scan(&result.Id, &result.Economic, &result.Diplomatic, &result.Civil, &result.Societal,
+                         &result.EconomicLabel, &result.DiplomaticLabel, &result.CivilLabel, &result.SocietalLabel, &result.ClosestMatch)
         if err != nil {
             return nil, err
         }
