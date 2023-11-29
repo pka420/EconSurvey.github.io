@@ -9,13 +9,13 @@ services:
     volumes:
       - ./backend:/app
   frontend:
-    build: ./frontend
+    build: ./
     container_name: ${frontend_name:-survey_frontend}
     ports:
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/default.conf:/etc/nginx/default.conf
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt/:/etc/nginx/ssl
     depends_on:
       - backend

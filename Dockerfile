@@ -2,9 +2,8 @@ FROM nginx:latest
 
 WORKDIR /var/html
 
-COPY . .
 
-FROM nginx:latest
+COPY . /var/html/
 
 EXPOSE 443
 
